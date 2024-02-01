@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { LoginFormComponent } from '../../components/forms/login-form/login-form.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [],
+  imports: [LoginFormComponent, RouterLink],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
 })

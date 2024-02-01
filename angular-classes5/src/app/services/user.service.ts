@@ -26,6 +26,10 @@ export class UserService {
     });
   }
 
+  getUser(){
+    return this.userSignal();
+  }
+
   register(formData: TRegisterUserData) {
     this.userRequest.register(formData).subscribe({
       next: () => {

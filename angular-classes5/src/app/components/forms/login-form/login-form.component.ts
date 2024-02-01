@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UserService } from '../../../services/user.service';
+import { TLoginUserData } from '../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-login-form',
@@ -9,8 +11,15 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './login-form.component.scss',
 })
 export class LoginFormComponent {
+  constructor(private userService: UserService) {}
+
   loginForm = new FormGroup({
-    email: new FormControl(null),
-    password: new FormControl(null),
+    email: new FormControl<string | null>(null),
+    password: new FormControl<string | null>(null),
   });
+
+  submit(){
+    const data = this.loginForm.value as TLoginUserData;
+    this.userService.login(data);
+  }
 }

@@ -1,1 +1,7 @@
-<p>dashboard-page works!</p>
+<main>
+    <div *ngIf="user">
+        <p>{{ user.name }} - {{ user.job }}</p>
+        <p>{{ user.email }}</p>
+        <button (click)="handleLogout()">Sair</button>
+    </div>
+</main>    
