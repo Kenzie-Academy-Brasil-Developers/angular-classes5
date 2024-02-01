@@ -14,23 +14,39 @@ export class UserService {
   readonly userSignal = signal<TUserReturn | null>(null);
 
   constructor(private userRequest: UserRequest, private router: Router) {
-    this.userRequest.getUser()?.subscribe((data) => {
-      this.userSignal.set(data);
+    this.userRequest.getUser()?.subscribe({
+      next: (data) => {
+        this.userSignal.set(data);
+      },
+      error: (error) => {
+        console.log(error);
+        this.logout();
+      }
     });
   }
 
   register(formData: TRegisterUserData) {
-    this.userRequest.register(formData).subscribe((data) => {
-      alert('Cadastro realizado com sucesso');
+    this.userRequest.register(formData).subscribe({
+      next: () => {
+        alert('Cadastro realizado com sucesso');
+      },
+      error: (error) => {
+        console.log(error);
+      }
     });
   }
 
   login(formData: TLoginUserData) {
-    this.userRequest.login(formData).subscribe((data) => {
-      this.userSignal.set(data.user);
-      localStorage.setItem('@TOKEN', JSON.stringify(data.accessToken));
-      localStorage.setItem('@USERID', JSON.stringify(data.user.id));
-      this.router.navigateByUrl("/dashboard");
+    this.userRequest.login(formData).subscribe({
+      next: (data) => {
+        this.userSignal.set(data.user);
+        localStorage.setItem('@TOKEN', JSON.stringify(data.accessToken));
+        localStorage.setItem('@USERID', JSON.stringify(data.user.id));
+        this.router.navigateByUrl("/dashboard");
+      },
+      error: (error) => {
+        console.log(error);
+      }
     });
   }
 
