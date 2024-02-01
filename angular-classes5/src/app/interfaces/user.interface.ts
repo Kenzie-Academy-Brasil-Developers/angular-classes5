@@ -6,9 +6,16 @@ export interface IUser{
     job: string;
 }
 
-export type TRegisterUserData = Omit<IUser, "id">;
+export interface IUserData{
+    name: string | null;
+    email: string | null;
+    password: string | null;
+    job: string | null;
+}
 
-export type TLoginUserData = Pick<IUser, "email" | "password">;
+export type TRegisterUserData = Omit<IUserData, "id">;
+
+export type TLoginUserData = Pick<IUserData, "email" | "password">;
 
 export type TUserReturn = Omit<IUser, "password">;
 

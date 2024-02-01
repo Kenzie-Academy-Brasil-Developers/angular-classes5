@@ -6,6 +6,7 @@ import {
 } from '../interfaces/user.interface';
 import { UserRequest } from '../api/user.request';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,7 @@ export class UserService {
       error: (error) => {
         console.log(error);
         this.logout();
-      }
+      },
     });
   }
 
@@ -29,10 +30,16 @@ export class UserService {
     this.userRequest.register(formData).subscribe({
       next: () => {
         alert('Cadastro realizado com sucesso');
+        this.router.navigateByUrl("/");
       },
       error: (error) => {
         console.log(error);
-      }
+        if (error instanceof HttpErrorResponse) {
+          if (error.error === 'Email already exists') {
+            alert('Usuário já cadastro no sistema');
+          }
+        }
+      },
     });
   }
 
@@ -42,11 +49,11 @@ export class UserService {
         this.userSignal.set(data.user);
         localStorage.setItem('@TOKEN', JSON.stringify(data.accessToken));
         localStorage.setItem('@USERID', JSON.stringify(data.user.id));
-        this.router.navigateByUrl("/dashboard");
+        this.router.navigateByUrl('/dashboard');
       },
       error: (error) => {
         console.log(error);
-      }
+      },
     });
   }
 
@@ -54,6 +61,6 @@ export class UserService {
     this.userSignal.set(null);
     localStorage.removeItem('@TOKEN');
     localStorage.removeItem('@USERID');
-    this.router.navigateByUrl("/");
+    this.router.navigateByUrl('/');
   }
 }
