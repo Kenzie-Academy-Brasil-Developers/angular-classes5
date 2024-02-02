@@ -18,6 +18,7 @@ export class UserService {
     this.userRequest.getUser()?.subscribe({
       next: (data) => {
         this.userSignal.set(data);
+        this.router.navigateByUrl("/dashboard");
       },
       error: (error) => {
         console.log(error);
