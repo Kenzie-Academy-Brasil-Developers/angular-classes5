@@ -11,9 +11,7 @@ import { Router } from '@angular/router';
   styleUrl: './dashboard-page.component.scss'
 })
 export class DashboardPageComponent {
-  constructor(private userService: UserService, private router: Router) {
-    if(!this.user) this.router.navigateByUrl("/");
-  }
+  constructor(private userService: UserService) { }
 
   get user(){
     return this.userService.getUser();
