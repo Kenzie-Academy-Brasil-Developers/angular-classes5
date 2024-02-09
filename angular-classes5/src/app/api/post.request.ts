@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TCreatePostData } from '../interfaces/post.interface';
+import { IPost, TCreatePostData, TUpdatePostData } from '../interfaces/post.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class PostRequest {
     if (token) {
       const parsedToken = JSON.parse(token);
 
-      return this.http.post(`${this.BASE_URL}/news`, data, {
+      return this.http.post<IPost>(`${this.BASE_URL}/news`, data, {
         headers: {
           Authorization: `Bearer ${parsedToken}`,
         },
@@ -27,12 +27,38 @@ export class PostRequest {
   }
 
   getPosts() {
-    return this.http.get(`${this.BASE_URL}/news`);
+    return this.http.get<IPost[]>(`${this.BASE_URL}/news`);
   }
 
-  update() {
-    
+  update(postId: number, data: TUpdatePostData) {
+    const token = localStorage.getItem('@TOKEN');
+
+    if (token) {
+      const parsedToken = JSON.parse(token);
+
+      return this.http.patch<IPost>(`${this.BASE_URL}/news/${postId}`, data, {
+        headers: {
+          Authorization: `Bearer ${parsedToken}`,
+        },
+      });
+    } else {
+      return null;
+    }
   }
 
-  delete() {}
+  delete(postId: number) {
+    const token = localStorage.getItem('@TOKEN');
+
+    if (token) {
+      const parsedToken = JSON.parse(token);
+
+      return this.http.delete(`${this.BASE_URL}/news/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${parsedToken}`,
+        },
+      });
+    } else {
+      return null;
+    }
+  }
 }
