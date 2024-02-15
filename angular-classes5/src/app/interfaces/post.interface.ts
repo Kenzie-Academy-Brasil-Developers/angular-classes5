@@ -9,3 +9,6 @@ export interface IPost{
 export type TCreatePostData = Omit<IPost, "id">;
 
 export type TUpdatePostData = Partial<Omit<IPost, "id" | "author">>;
+
+export type TCreatePostFormData = Omit<TCreatePostData, "author">;
+
