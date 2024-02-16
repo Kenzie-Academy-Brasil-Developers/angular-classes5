@@ -6,5 +6,12 @@
       <button (click)="handleLogout()">Sair</button>
     </div>
     <app-post-create-form></app-post-create-form>
+    <ul *ngIf="postList.length > 0">
+      <li *ngFor="let post of postList">
+        <h3>{{ post.title }} - {{ post.author }}</h3>
+        <p>{{ post.content }}</p>
+      </li>
+    </ul>
+    <p *ngIf="postList.length === 0">Cadastre a primeira notícia.</p>
   </main>
 </app-private-route>
