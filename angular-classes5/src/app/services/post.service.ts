@@ -1,7 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import {
   IPost,
-  TCreatePostData,
   TCreatePostFormData,
   TUpdatePostData,
 } from '../interfaces/post.interface';
@@ -13,7 +12,6 @@ import { UserService } from './user.service';
 })
 export class PostService {
   readonly postListSignal = signal<IPost[]>([]);
-  readonly editingPostSignal = signal<IPost | null>(null);
 
   constructor(
     private postRequest: PostRequest,
@@ -24,21 +22,13 @@ export class PostService {
     });
   }
 
-  getEditingPost() {
-    return this.editingPostSignal();
-  }
-
-  setEditingPost(value: IPost | null) {
-    this.editingPostSignal.set(value);
-  }
-
   getPosts() {
     return this.postListSignal();
   }
 
   create(formData: TCreatePostFormData) {
     const user = this.userService.getUser();
-
+    
     if (user) {
       const requestData = { ...formData, author: user.name };
       this.postRequest.create(requestData)?.subscribe((data) => {
@@ -47,24 +37,18 @@ export class PostService {
     }
   }
 
-  update(formData: TUpdatePostData) {
-    const editingPost = this.editingPostSignal();
-
-    if (editingPost) {
-      const id = editingPost.id;
-
-      this.postRequest.update(id, formData)?.subscribe((data) => {
-        this.postListSignal.update((postList) =>
-          postList.map((post) => {
-            if (post.id === id) {
-              return data;
-            } else {
-              return post;
-            }
-          })
-        );
-      });
-    }
+  update(id: number, formData: TUpdatePostData) {
+    this.postRequest.update(id, formData)?.subscribe((data) => {
+      this.postListSignal.update((postList) =>
+        postList.map((post) => {
+          if (post.id === id) {
+            return data;
+          } else {
+            return post;
+          }
+        })
+      );
+    });
   }
 
   delete(id: number) {
@@ -75,3 +59,4 @@ export class PostService {
     });
   }
 }
+
