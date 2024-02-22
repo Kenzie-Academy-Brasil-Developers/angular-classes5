@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PostService } from '../../../services/post.service';
 import { TUpdatePostData } from '../../../interfaces/post.interface';
@@ -11,16 +11,24 @@ import { TUpdatePostData } from '../../../interfaces/post.interface';
   styleUrl: './post-edit-form.component.scss'
 })
 export class PostEditFormComponent {
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService) {
+    effect(() => {
+      this.postEditForm.setValue({
+        category: this.editingPost?.category as string,
+        title: this.editingPost?.title as string,
+        content: this.editingPost?.content as string,
+      })
+    });
+  }
 
   get editingPost(){
     return this.postService.getEditingPost();
   }
 
   postEditForm = new FormGroup({
-    category: new FormControl<string | null>(this.editingPost?.category as string),
-    title: new FormControl<string | null>(this.editingPost?.title as string),
-    content: new FormControl<string | null>(this.editingPost?.content as string),
+    category: new FormControl<string | null>(null),
+    title: new FormControl<string | null>(null),
+    content: new FormControl<string | null>(null),
   })
 
   submit(){
